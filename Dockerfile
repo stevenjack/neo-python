@@ -1,11 +1,21 @@
 FROM ubuntu:16.04
+LABEL maintainer="hal0x2328"
 
-RUN apt-get update && apt-get -y install git python3-dev python3-pip libleveldb-dev libssl-dev man
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN git clone https://github.com/CityOfZion/neo-python.git
+RUN apt-get update && apt-get install -y \
+    apt-utils \
+    wget python \
+    ca-certificates apt-transport-https \
+    libleveldb-dev sqlite3 libsqlite3-dev \
+    python3.5-dev python3-pip libssl-dev
 
-WORKDIR neo-python
+RUN rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install -r requirements.txt
+ADD . /opt/neo-python
+WORKDIR /opt/neo-python
 
-CMD python3 prompt.py
+RUN pip3 install -r /opt/neo-python/requirements.txt
+RUN chmod u+x $NEO_PYTHON_CLAIM_SCRIPT
+
+ENTRYPOINT ["python3.5"]
