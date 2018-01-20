@@ -16,6 +16,6 @@ ADD . /opt/neo-python
 WORKDIR /opt/neo-python
 
 RUN pip3 install -r /opt/neo-python/requirements.txt
-RUN chmod u+x $NEO_PYTHON_CLAIM_SCRIPT
+RUN chmod u+x /opt/neo-python/scripts/claim_neo_and_gas.py
 
 ENTRYPOINT ["python3.5"]
