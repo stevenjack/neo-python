@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 """
 privnet-claim-neo-and-gas.py
