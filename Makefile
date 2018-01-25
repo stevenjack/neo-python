@@ -30,7 +30,7 @@ help:
 	@python3 -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 build-image:
-	@docker build -t ${ORG}/${REPONAME} .
+	@docker build -t ${ORG}/${REPONAME}:latest .
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
@@ -69,6 +69,4 @@ docs: ## generate Sphinx HTML documentation, including API docs
 
 push-to-registry:
 	@docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
-	@docker tag ${ORG}/${REPONAME}:latest ${ORG}/${REPONAME}:${CIRCLE_TAG}
-	@docker push ${ORG}/${REPONAME}:${CIRCLE_TAG}
-	@docker push ${ORG}/${REPONAME}
+	@docker push ${ORG}/${REPONAME}:latest
