@@ -1,3 +1,6 @@
+ORG ?= "smaj"
+REPONAME ?= "neo-python"
+
 .PHONY: clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
 define BROWSER_PYSCRIPT
@@ -26,8 +29,10 @@ BROWSER := python3 -c "$$BROWSER_PYSCRIPT"
 help:
 	@python3 -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
+build-image:
+	@docker build -t ${ORG}/${REPONAME} .
 
+clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -61,3 +66,9 @@ coverage: ## check code coverage quickly with the default Python
 docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
+
+push-to-registry:
+	@docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
+	@docker tag ${ORG}/${REPONAME}:latest ${ORG}/${REPONAME}:${CIRCLE_TAG}
+	@docker push ${ORG}/${REPONAME}:${CIRCLE_TAG}
+	@docker push ${ORG}/${REPONAME}
